@@ -1,0 +1,1 @@
+{"event":"grant","delegation_id":"DLG-001","policy_revision":1,"grantor_role":"lead","grantee_role":"worker","task_id":"TASK-001","paths":["work-area/report.md"],"actions":["create","modify"],"issued_at":"2026-08-12T08:00:00Z","expires_at":"2026-08-13T08:00:00Z","note":"Prepare the reviewed draft."}

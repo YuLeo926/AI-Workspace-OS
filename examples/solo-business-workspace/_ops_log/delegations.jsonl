@@ -1,0 +1,2 @@
+{"event":"grant","delegation_id":"DLG-EXAMPLE-001","policy_revision":1,"grantor_role":"lead","grantee_role":"worker","task_id":"TASK-EXAMPLE-001","paths":["business/00_agent_handoff.md"],"actions":["modify"],"issued_at":"2026-06-18T08:00:00Z","expires_at":"2026-06-19T08:00:00Z","note":"Synthetic handoff update."}
+{"event":"revoke","delegation_id":"DLG-EXAMPLE-001","revoked_by_role":"lead","timestamp":"2026-06-18T10:00:00Z","reason":"Synthetic task completed."}

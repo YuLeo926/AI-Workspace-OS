@@ -1,0 +1,119 @@
+{
+  "protocol_version": "0.2",
+  "policy_revision": 1,
+  "default_write": "deny",
+  "human_override_role": "workspace_owner",
+  "roles": [
+    {
+      "id": "workspace_owner",
+      "description": "Human workspace owner",
+      "status": "active"
+    },
+    {
+      "id": "worker",
+      "description": "Scoped implementation role",
+      "status": "active"
+    }
+  ],
+  "ownership": [
+    {
+      "path": "00_WORKSPACE_INDEX.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_THIS_WEEK.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_agent_handoff.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "_rules.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_DECISIONS/",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "_ops_log/",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "AGENTS.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "CLAUDE.md",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "workspace-policy.json",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": ".ai-workspace-os/",
+      "owner": "workspace_owner",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "work-area/",
+      "owner": "worker",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    }
+  ],
+  "standing_permissions": [
+    {
+      "path": "_ops_log/agent_action_log.jsonl",
+      "role": "workspace_owner",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/agent_action_log.jsonl",
+      "role": "worker",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/delegations.jsonl",
+      "role": "workspace_owner",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/delegations.jsonl",
+      "role": "worker",
+      "actions": ["append"]
+    }
+  ],
+  "protected_paths": [
+    {
+      "path": "workspace-policy.json",
+      "required_role": "workspace_owner"
+    },
+    {
+      "path": "AGENTS.md",
+      "required_role": "workspace_owner"
+    },
+    {
+      "path": "CLAUDE.md",
+      "required_role": "workspace_owner"
+    },
+    {
+      "path": ".ai-workspace-os/",
+      "required_role": "workspace_owner"
+    }
+  ],
+  "handoff": {
+    "max_review_window_days": 14,
+    "enforce_expiry": true
+  }
+}

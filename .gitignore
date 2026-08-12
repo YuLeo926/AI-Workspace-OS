@@ -1,0 +1,9 @@
+# Local planning artifacts
+docs/superpowers/
+.private/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

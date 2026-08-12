@@ -1,0 +1,154 @@
+{
+  "protocol_version": "0.2",
+  "policy_revision": 1,
+  "default_write": "deny",
+  "human_override_role": "coordinator",
+  "roles": [
+    {
+      "id": "coordinator",
+      "description": "Human workspace coordinator",
+      "status": "active"
+    },
+    {
+      "id": "lead",
+      "description": "Project direction owner",
+      "status": "active"
+    },
+    {
+      "id": "worker",
+      "description": "Scoped implementation role",
+      "status": "active"
+    }
+  ],
+  "ownership": [
+    {
+      "path": "00_WORKSPACE_INDEX.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_THIS_WEEK.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_agent_handoff.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "_rules.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "AGENTS.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "CLAUDE.md",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "workspace-policy.json",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": ".ai-workspace-os/",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "_ops_log/",
+      "owner": "coordinator",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "00_DECISIONS/",
+      "owner": "lead",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "business/",
+      "owner": "lead",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "business/product/",
+      "owner": "worker",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "business/content/",
+      "owner": "worker",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "business/client-work/",
+      "owner": "worker",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    },
+    {
+      "path": "business/research-backlog/",
+      "owner": "worker",
+      "actions": ["create", "modify", "append", "delete", "move"]
+    }
+  ],
+  "standing_permissions": [
+    {
+      "path": "_ops_log/agent_action_log.jsonl",
+      "role": "coordinator",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/agent_action_log.jsonl",
+      "role": "lead",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/agent_action_log.jsonl",
+      "role": "worker",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/delegations.jsonl",
+      "role": "coordinator",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/delegations.jsonl",
+      "role": "lead",
+      "actions": ["append"]
+    },
+    {
+      "path": "_ops_log/delegations.jsonl",
+      "role": "worker",
+      "actions": ["append"]
+    }
+  ],
+  "protected_paths": [
+    {
+      "path": "workspace-policy.json",
+      "required_role": "coordinator"
+    },
+    {
+      "path": "AGENTS.md",
+      "required_role": "coordinator"
+    },
+    {
+      "path": "CLAUDE.md",
+      "required_role": "coordinator"
+    },
+    {
+      "path": ".ai-workspace-os/",
+      "required_role": "coordinator"
+    }
+  ],
+  "handoff": {
+    "max_review_window_days": 14,
+    "enforce_expiry": false
+  }
+}
