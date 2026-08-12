@@ -178,7 +178,7 @@ try {
 
     $missingEntry = Copy-WorkspaceFixture -Source $Example -Name "missing-entry"
     Remove-Item -LiteralPath (Join-Path $missingEntry "AGENTS.md")
-    Remove-Item -LiteralPath (Join-Path $missingEntry ".ai-workspace-os") -Recurse
+    Remove-Item -LiteralPath (Join-Path $missingEntry ".ai-workspace-os") -Recurse -Force
     $missingEntryResult = Invoke-TestScript -ScriptPath $CheckWorkspace -Arguments @("-Path", $missingEntry, "-ParseSafe")
     Assert-ExitCode $missingEntryResult 1 "Missing native entry files"
     $missingEntrySummary = Get-ParseSafeSummary $missingEntryResult
