@@ -55,7 +55,10 @@ function Test-AuthorizationString {
 }
 
 function Test-AuthorizationFilesystemLink {
-    param([Parameter(Mandatory = $true)][object]$Item)
+    param(
+        [Parameter(Mandatory = $true)][object]$Item,
+        [Parameter(Mandatory = $true)][string]$Path
+    )
 
     if (($Item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
         return $true
@@ -63,6 +66,25 @@ function Test-AuthorizationFilesystemLink {
 
     $linkTypeProperty = $Item.PSObject.Properties["LinkType"]
     if ($null -ne $linkTypeProperty -and -not [string]::IsNullOrWhiteSpace([string]$linkTypeProperty.Value)) {
+        return $true
+    }
+
+    try {
+        $fileSystemInfo = if ($Item.PSIsContainer) {
+            New-Object IO.DirectoryInfo($Path)
+        }
+        else {
+            New-Object IO.FileInfo($Path)
+        }
+        $linkTargetProperty = $fileSystemInfo.GetType().GetProperty("LinkTarget")
+        if ($null -ne $linkTargetProperty) {
+            $linkTarget = $linkTargetProperty.GetValue($fileSystemInfo, $null)
+            if (-not [string]::IsNullOrWhiteSpace([string]$linkTarget)) {
+                return $true
+            }
+        }
+    }
+    catch {
         return $true
     }
 
@@ -94,7 +116,7 @@ function Test-AuthorizationFilesystemPath {
                 break
             }
             $item = Get-Item -LiteralPath $current -Force
-            if (Test-AuthorizationFilesystemLink -Item $item) {
+            if (Test-AuthorizationFilesystemLink -Item $item -Path $current) {
                 return $false
             }
         }
@@ -174,7 +196,7 @@ try {
     }
 
     $workspaceItem = Get-Item -LiteralPath $WorkspacePath -Force -ErrorAction Stop
-    if (-not $workspaceItem.PSIsContainer -or (Test-AuthorizationFilesystemLink -Item $workspaceItem)) {
+    if (-not $workspaceItem.PSIsContainer -or (Test-AuthorizationFilesystemLink -Item $workspaceItem -Path $workspaceItem.FullName)) {
         $reasonCode = "invalid_workspace"
         throw [IO.InvalidDataException]::new("stop")
     }
