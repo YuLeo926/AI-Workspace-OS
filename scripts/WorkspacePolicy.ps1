@@ -2,6 +2,17 @@ Set-StrictMode -Version Latest
 
 $script:WorkspacePolicySupportedActions = @("create", "modify", "append", "delete", "move")
 
+function ConvertFrom-WorkspaceJson {
+    param([Parameter(Mandatory = $true)][string]$InputObject)
+
+    $command = Get-Command ConvertFrom-Json -ErrorAction Stop
+    if ($command.Parameters.ContainsKey("DateKind")) {
+        return ConvertFrom-Json -InputObject $InputObject -DateKind String -ErrorAction Stop
+    }
+
+    return ConvertFrom-Json -InputObject $InputObject -ErrorAction Stop
+}
+
 function New-WorkspacePolicyIssue {
     param(
         [Parameter(Mandatory = $true)]
@@ -357,7 +368,7 @@ function Read-WorkspacePolicy {
     }
 
     try {
-        $policy = ConvertFrom-Json -InputObject $content -ErrorAction Stop
+        $policy = ConvertFrom-WorkspaceJson -InputObject $content
     }
     catch {
         Add-WorkspacePolicyIssue -Collection $errors -Code "malformed_json" -Message "The workspace policy is not valid JSON."
@@ -1074,7 +1085,7 @@ function Read-DelegationLedger {
         }
 
         try {
-            $eventObject = ConvertFrom-Json -InputObject $line -ErrorAction Stop
+            $eventObject = ConvertFrom-WorkspaceJson -InputObject $line
         }
         catch {
             Add-WorkspacePolicyIssue -Collection $errors -Code "malformed_json" -Line $lineNumber -Message "A delegation ledger line is not valid JSON."

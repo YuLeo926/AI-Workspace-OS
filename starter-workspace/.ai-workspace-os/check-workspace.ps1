@@ -86,7 +86,7 @@ function Get-CurrentPowerShellCommand {
             $baseArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File")
         }
         "Core" {
-            $source = Join-Path $PSHOME "pwsh.exe"
+            $source = (Get-Process -Id $PID -ErrorAction Stop).Path
             $baseArgs = @("-NoProfile", "-File")
         }
         default {

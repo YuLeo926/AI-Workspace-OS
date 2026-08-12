@@ -48,6 +48,17 @@ function Test-IsJsonObject {
     return ($null -ne $InputObject -and $InputObject -is [pscustomobject])
 }
 
+function ConvertFrom-OpsLogJson {
+    param([Parameter(Mandatory = $true)][string]$InputObject)
+
+    $command = Get-Command ConvertFrom-Json -ErrorAction Stop
+    if ($command.Parameters.ContainsKey("DateKind")) {
+        return ConvertFrom-Json -InputObject $InputObject -DateKind String -ErrorAction Stop
+    }
+
+    return ConvertFrom-Json -InputObject $InputObject -ErrorAction Stop
+}
+
 function Test-IsIsoTimestamp {
     param([string]$Value)
 
@@ -252,7 +263,7 @@ for ($index = 0; $index -lt $lines.Count; $index++) {
     }
 
     try {
-        $entry = ConvertFrom-Json -InputObject $line -ErrorAction Stop
+        $entry = ConvertFrom-OpsLogJson -InputObject $line
         $summary.validJsonLines++
     }
     catch {
