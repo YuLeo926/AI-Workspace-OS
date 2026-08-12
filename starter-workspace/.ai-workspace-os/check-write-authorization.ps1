@@ -54,6 +54,25 @@ function Test-AuthorizationString {
     )
 }
 
+function Test-AuthorizationFilesystemLink {
+    param([Parameter(Mandatory = $true)][object]$Item)
+
+    if (($Item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+        return $true
+    }
+
+    $linkTypeProperty = $Item.PSObject.Properties["LinkType"]
+    if ($null -ne $linkTypeProperty -and -not [string]::IsNullOrWhiteSpace([string]$linkTypeProperty.Value)) {
+        return $true
+    }
+
+    $targetProperty = $Item.PSObject.Properties["Target"]
+    return (
+        $null -ne $targetProperty -and
+        -not [string]::IsNullOrWhiteSpace(([string[]]@($targetProperty.Value) -join ""))
+    )
+}
+
 function Test-AuthorizationFilesystemPath {
     param(
         [Parameter(Mandatory = $true)][string]$WorkspaceRoot,
@@ -75,7 +94,7 @@ function Test-AuthorizationFilesystemPath {
                 break
             }
             $item = Get-Item -LiteralPath $current -Force
-            if (($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            if (Test-AuthorizationFilesystemLink -Item $item) {
                 return $false
             }
         }
@@ -155,7 +174,7 @@ try {
     }
 
     $workspaceItem = Get-Item -LiteralPath $WorkspacePath -Force -ErrorAction Stop
-    if (-not $workspaceItem.PSIsContainer -or (($workspaceItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0)) {
+    if (-not $workspaceItem.PSIsContainer -or (Test-AuthorizationFilesystemLink -Item $workspaceItem)) {
         $reasonCode = "invalid_workspace"
         throw [IO.InvalidDataException]::new("stop")
     }
