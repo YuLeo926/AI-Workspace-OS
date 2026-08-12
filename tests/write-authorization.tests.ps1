@@ -226,17 +226,29 @@ try {
     New-Item -ItemType Directory -Path $outside -Force | Out-Null
     $link = Join-Path $workspace "work-area\escape"
     $linkCreated = $false
-    try {
-        New-Item -ItemType Junction -Path $link -Target $outside -ErrorAction Stop | Out-Null
-        $linkCreated = $true
+    $isWindowsPlatform = ($PSVersionTable.PSEdition -eq "Desktop" -or $env:OS -eq "Windows_NT")
+    if ($isWindowsPlatform) {
+        try {
+            New-Item -ItemType Junction -Path $link -Target $outside -ErrorAction Stop | Out-Null
+            $linkCreated = $true
+        }
+        catch {
+            try {
+                New-Item -ItemType SymbolicLink -Path $link -Target $outside -ErrorAction Stop | Out-Null
+                $linkCreated = $true
+            }
+            catch {
+                Write-Host "Reparse-point test skipped: platform did not permit link creation."
+            }
+        }
     }
-    catch {
+    else {
         try {
             New-Item -ItemType SymbolicLink -Path $link -Target $outside -ErrorAction Stop | Out-Null
             $linkCreated = $true
         }
         catch {
-            Write-Host "Reparse-point test skipped: platform did not permit link creation."
+            Write-Host "Symbolic-link test skipped: platform did not permit link creation."
         }
     }
     if ($linkCreated) {
